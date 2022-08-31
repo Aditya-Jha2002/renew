@@ -1,0 +1,68 @@
+base:
+  project: toxic-language-india
+  random_state: 42
+  target_col: Target
+  submission_dir: submissions
+  submission_file: submission-0.csv
+
+raw_dataset:
+  raw_dir: data/raw/
+  train: train.csv
+  test: test.csv
+  submission: submission.csv
+
+make_dataset:
+  clean_dir: data/interim/
+  train: train_clean.csv
+  test: test_clean.csv
+  fold_num: 5
+
+build_features:
+  feature_dir: data/processed/
+  train: train_features.csv
+  test: test_features.csv
+
+cols:
+  cat_col: ['active_power_calculated_by_converter', 'active_power_raw',
+       'ambient_temperature', 'generator_speed', 'generator_winding_temp_max',
+       'grid_power10min_average', 'nc1_inside_temp', 'nacelle_temp',
+       'reactice_power_calculated_by_converter', 'reactive_power',
+       'wind_direction_raw', 'wind_speed_raw', 'wind_speed_turbulence']
+  cont_col: ['turbine_id']
+  target_col: 'Target'
+
+estimators:
+  LinearRegression:
+    model: LinearRegression
+    params:
+      n_components: 12
+  RidgeRegression:
+    model: RidgeRegression
+    params:
+      alpha: 0.004122299548988457
+      solver: sparse_cg
+      n_components: 14
+      max_iter: 1066
+  # PolynomialRegression:
+  # SupportVectorRegression:
+  # NeuralNetworkRegression:
+  DecisionTreeRegression:
+  RandomForestRegressor:
+  XGBRegressor:
+  GradientBoostingRegressor:
+  LightGBMRegressor:
+  CatBoostRegressor:
+
+model_dir: models
+
+reports:
+  report_dir: reports
+  params_file: params.json
+  scores_file: scores.json
+
+mlflow_config:
+  artifacts_dir: artifacts
+  experiment_name: RidgeRegression
+  run_name: mlops
+  registered_model_name: RidgeRegressionModel
+  remote_server_uri: http://0.0.0.0:1234

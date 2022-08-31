@@ -1,0 +1,6 @@
+{
+    "n_components": 12,
+    "alpha": 0.004122299548988457,
+    "solver": "sparse_cg",
+    "max_iter": 1066
+}
