@@ -3,8 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_percentage_error
-from sklearn.linear_model import LinearRegression, Ridge, Lasso
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.decomposition import PCA
 from src import utils
 from src.build_features import BuildFeatures
@@ -37,10 +36,13 @@ class Trainer:
         self.cont_col = config["cols"]["cont_col"]
         self.target_col = config["cols"]["target_col"]
 
-        self.n_components = config["estimators"]["LinearRegression"]["params"]["n_components"]
-        self.alpha = config["estimators"]["RidgeRegression"]["params"]["alpha"]
-        self.solver = config["estimators"]["RidgeRegression"]["params"]["solver"]
-        self.max_iter = config["estimators"]["RidgeRegression"]["params"]["max_iter"]
+        self.n_components = config["estimators"]["DecisionTreeRegression"]["params"]["n_components"]
+        self.n_estimators = config["estimators"]["DecisionTreeRegression"]["params"]["n_estimators"]
+        self.max_features = config["estimators"]["DecisionTreeRegression"]["params"]["max_features"]
+        self.max_depth = config["estimators"]["DecisionTreeRegression"]["params"]["max_depth"]
+        self.min_samples_split = config["estimators"]["DecisionTreeRegression"]["params"]["min_samples_split"]
+        self.min_samples_leaf = config["estimators"]["DecisionTreeRegression"]["params"]["min_samples_leaf"]
+        self.bootstrap = config["estimators"]["DecisionTreeRegression"]["params"]["bootstrap"]
         self.random_state = config["base"]["random_state"]
 
         self.model_dir = config["model_dir"]
@@ -90,9 +92,12 @@ class Trainer:
         with open(os.path.join(self.report_dir, self.params_file), "w") as f:
             params = {
                 "n_components": self.n_components,
-                "alpha": self.alpha,
-                "solver": self.solver,
-                "max_iter": self.max_iter,
+                "n_estimators": self.n_estimators,
+                "max_features": self.max_features,
+                "max_depth": self.max_depth,
+                "min_samples_split": self.min_samples_split,
+                "min_samples_leaf": self.min_samples_leaf,
+                "bootstrap": self.bootstrap,
             }
             json.dump(params, f, indent=4)
     #####################################################
@@ -116,7 +121,7 @@ class Trainer:
 
         xtrain_ft, xvalid_ft, xtest_ft = BuildFeatures(self.config_path).build_features_for_model(xtrain, xvalid, xtest, self.n_components)
 
-        clf = Ridge(alpha=self.alpha, solver=self.solver, max_iter=self.max_iter, random_state=self.random_state)
+        clf = RandomForestRegressor(n_estimators=self.n_estimators, max_depth=self.max_depth, min_samples_split=self.min_samples_split, min_samples_leaf=self.min_samples_leaf, max_features=self.max_features, bootstrap=self.bootstrap, random_state=self.random_state)
 
         clf.fit(xtrain_ft, ytrain)
         

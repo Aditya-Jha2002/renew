@@ -36,6 +36,7 @@ estimators:
     model: LinearRegression
     params:
       n_components: 12
+
   RidgeRegression:
     model: RidgeRegression
     params:
@@ -43,11 +44,31 @@ estimators:
       solver: sparse_cg
       n_components: 14
       max_iter: 1066
+
   # PolynomialRegression:
   # SupportVectorRegression:
   # NeuralNetworkRegression:
+
   DecisionTreeRegression:
+    model: DecisionTreeRegressor
+    params:
+      n_components: 13
+      max_depth: 9
+      min_samples_split: 8
+      min_samples_leaf: 7
+      max_features: auto
+
   RandomForestRegressor:
+    model: RandomForestRegressor
+    params:
+      n_components: 13
+      n_estimators: 100
+      max_features: auto
+      max_depth: 9
+      min_samples_split: 8
+      min_samples_leaf: 7
+      bootstrap: True
+      
   XGBRegressor:
   GradientBoostingRegressor:
   LightGBMRegressor:
@@ -62,7 +83,6 @@ reports:
 
 mlflow_config:
   artifacts_dir: artifacts
-  experiment_name: RidgeRegression
-  run_name: mlops
-  registered_model_name: RidgeRegressionModel
+  experiment_name: RandomForestRegression
+  registered_model_name: RandomForestRegressionModel
   remote_server_uri: http://0.0.0.0:1234
